@@ -54,10 +54,22 @@
             <a href="/chat" class="sm-link sm-link_text sm-link7" data-sm-link-text="유저 채팅">
             <span class="sm-link__label"> 유저 채팅</span>
         </a>
+        <a href="/myfavorite" class="sm-link sm-link_text sm-link7" data-sm-link-text="즐겨찾기">
+                <span class="sm-link__label"> 즐겨찾기</span>
+            </a>
+            <div>
+               <% var data = matchstat; %>
+                <% if(username != '') { %>
+                    <h5 class="text-light"><%=username%>님 환영합니다.</h5>
+                <% }else{%>
+                    <h5 class="text-light">로그인을 해주세요</h5>
+                <%} %>
+            </div>
+        
         </div>
     </section>
     <section class="container mt-5">
-        <% var data = matchstat; %>
+        
         <table class="w-100">
             <tr>
                 <td class="w-50">
@@ -108,6 +120,13 @@
                     <% if(data.awayRecentTable[i].away == data.away) {%> <td><b><%=data.awayRecentTable[i].away%></b></td> <% }else{%><td><%=data.awayRecentTable[i].away%></td> <%}%>
                     <td><%=data.awayRecentTable[i].score%></td>
             <% } )%>
+                </tr>
+                <% var date = new Date(); %>
+                <% var lasthomeDate = new Date(data.homeRecentTable[0].date + '2019'); %>
+                <% var lastawayDate = new Date(data.awayRecentTable[0].date + '2019'); %>
+                <tr>
+                    <td colspan="4" class="homefont">마지막 경기로부터 <b><%=Math.floor( ((date - lasthomeDate) / 1000) /60/60/24) %>일</b> 지났습니다.</td>
+                    <td colspan="4" class="awayfont">마지막 경기로부터 <b><%=Math.floor( ((date - lastawayDate) / 1000) /60/60/24) %>일</b> 지났습니다.</td>
                 </tr>
         </table>
         <table class="table table-striped bg-light">

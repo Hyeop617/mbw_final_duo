@@ -3,14 +3,13 @@
 
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width,initial-scale=1,minimum-scale=1,maximum-scale=1,user-scalable=no">
     <script src="js/jquery-3.3.1.min.js"></script>
     <script src="js/jquery.backstretch.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
 
     <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="css/header.css">
-    <link rel="stylesheet" href="css/index.css">
+    <link rel="stylesheet" href="css/epl.css">
     <title>P L A Y G R O U N D</title>
     <script>
         $(function() {
@@ -18,9 +17,6 @@
         });
 
     </script>
-         <style>
-     @import url('https://fonts.googleapis.com/css?family=Nanum+Pen+Script&display=swap&subset=korean');
-    </style>
 </head>
 
 <body>
@@ -30,48 +26,62 @@
         </div>
     </section>
     <section class="navbar">
-         <div class="navbar-item">
-              <a href="/epl" class="sm-link sm-link_text sm-link7" data-sm-link-text="EPL">
-            <span class="sm-link__label">EPL</span>
-        </a>
-            <a href="/laliga" class="sm-link sm-link_text sm-link7" data-sm-link-text="La Liga">
-            <span class="sm-link__label"> La Liga</span>
-        </a>
-           <a href="/bundesliga" class="sm-link sm-link_text sm-link7" data-sm-link-text="Bundesliga">
-            <span class="sm-link__label"> Bundesliga</span>
-        </a>
-            <a href="/seriea" class="sm-link sm-link_text sm-link7" data-sm-link-text="Serie A">
-            <span class="sm-link__label"> Serie A</span>
-        </a>
-           
-              <a href="/ligue1" class="sm-link sm-link_text sm-link7" data-sm-link-text="Ligue 1">
-            <span class="sm-link__label"> Ligue 1</span>
-        </a>
-           
-           <a href="/eredivisie" class="sm-link sm-link_text sm-link7" data-sm-link-text="Eredivisie">
-            <span class="sm-link__label"> Eredivisie</span>
-        </a>
-            <a href="/chat" class="sm-link sm-link_text sm-link7" data-sm-link-text="유저 채팅">
-            <span class="sm-link__label"> 유저 채팅</span>
-        </a>
+        <div class="navbar-item">
+            <a href="/epl">EPL</a>
+            <a href="/laliga">La Liga</a>
+            <a href="/bundesliga">Bundesliga</a>
+            <a href="/seriea">Serie A</a>
+            <a href="/ligue1">Ligue 1</a>
+            <a href="/eredivisie">Eredivisie</a>
+            <a href="/myfavorite">즐겨찾기</a>
+            <a href="/chat">유저채팅</a>
+            <% if(username != '') { %>
+                    <h5 class="text-light"><%=username%>님 환영합니다.</h5>
+                <% }else{%>
+                    <h5 class="text-light">로그인을 해주세요</h5>
+                <%} %>
         </div>
     </section>
     <section class="container mt-5">
-        <table class="epl table table-hover table-striped bg-light">
+        <table class="epl table text-center bg-light">
+            <tr>
+                <td>홈</td>
+                <td>어웨이</td>
+                <td>날짜</td>
+                <td>확률</td>
+                <td></td>
+            </tr>
             <% var arr = data; %>
-            <% arr.forEach(function(el) { %>
-                <tr id="tablerow" onclick="location.href = location.origin+'/matchstat?uid=<%=el.uid%>&league=<%=el.league%>'">
-                
-                <td class="home"><%=el.home%></td>
-                <td class="away"><%=el.away%></td>
-                <td class="date"><%=el.date%></td>
+            <% arr.forEach((e,i) => { %>
+            <tr>
+
+                <td class="home"><%=e.home%></td>
+                <td class="away"><%=e.away%></td>
+                <td class="date"><%=e.date%></td>
                 <td class="odds">
-                    <% if(el.odd != null){ %>
-                    승 : <%=el.odd[0].odd%> 무 : <%=el.odd[1].odd%> 패 : <%=el.odd[2].odd%>
+                    <% if(e.odd != null && e.odd[0].odd != '-1'){ %>
+                    <% var rate = 100 / ((100/ parseInt(e.odd[0].odd)) + (100/parseInt(e.odd[1].odd))+(100/ parseInt(e.odd[2].odd))) %>
+                    승 : <%=Math.round((1 / parseInt(e.odd[0].odd) * rate)*100)%>% 무 : <%=Math.round((1 / parseInt(e.odd[1].odd) * rate)*100)%>% 패 : <%=Math.round((1 / parseInt(e.odd[2].odd) * rate)*100)%>%
                     <% }else { %>
                     경기 시작 전 48시간 이내가 아닙니다.
                     <% } %>
-                </td>    
+                </td>
+                <td>
+                    <button onclick="location.href = location.origin+'/matchstat?uid=<%=e.uid%>&league=<%=e.league%>'">..</button>
+                </td>
+                <td>
+                   <form action="/favorite" method="post">        
+                      <input type="hidden" name="home" value="<%=e.home%>">
+                      <input type="hidden" name="away" value="<%=e.away%>">
+                      <input type="hidden" name="date" value="<%=e.date%>">
+                      <input type="hidden" name="oddwin" value="<%=e.odd!=null?e.odd[0].odd:"-1"%>">
+                      <input type="hidden" name="odddraw" value="<%=e.odd!=null?e.odd[1].odd:"-1"%>">
+                      <input type="hidden" name="oddlose" value="<%=e.odd!=null?e.odd[2].odd:"-1"%>">
+                      <input type="hidden" name="uid" value="<%=e.uid%>">
+                      <input type="hidden" name="league" value="<%=e.league%>">
+                      <input type="submit" value="☆">                       
+                   </form>
+                </td>
             </tr>
             <% }) %>
         </table>

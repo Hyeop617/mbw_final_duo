@@ -81,6 +81,8 @@ app.use("/", route); //라우팅 설정
 app.use("/signin", route)
 app.use("/league", route)
 app.use("/matchstat/:uid", route)
+app.use("/favorite/:uid", route)
+app.use("/myfavorite", route)
 
 server.listen(PORT || function () {
     console.log('Example app listening on port', PORT);
