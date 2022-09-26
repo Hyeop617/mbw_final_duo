@@ -21,7 +21,7 @@
     "nodemailer-smtp-transport": "^2.7.4",
     "passport": "^0.4.0",
     "passport-local": "^1.0.0",
-    "pm2": "^4.1.2",
+    "pm2": "^5.2.0",
     "request": "^2.88.0",
     "request-promise": "^4.2.5",
     "socket.io": "^2.3.0",
